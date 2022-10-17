@@ -1,0 +1,194 @@
+{
+    "xsappname": "caploadnovalog",
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "uaa.user",
+            "description": "UAA"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogViewer",
+            "description": "NovalogViewer"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogCreateHV",
+            "description": "NovalogCreateHV"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogUpdateHV",
+            "description": "NovalogUpdateHV"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogDeleteHV",
+            "description": "NovalogDeleteHV"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogManagerHV",
+            "description": "NovalogManagerHV"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogCreateLoad",
+            "description": "NovalogCreateLoad"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogUpdateLoad",
+            "description": "NovalogUpdateLoad"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogDeleteLoad",
+            "description": "NovalogDeleteLoad"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogManagerLoad",
+            "description": "NovalogManagerLoad"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogCreateTemplate",
+            "description": "NovalogCreateTemplate"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogUpdateTemplate",
+            "description": "NovalogUpdateTemplate"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogDeleteTemplate",
+            "description": "NovalogDeleteTemplate"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogManagerTemplate",
+            "description": "NovalogManagerTemplate"
+        },
+        {
+            "name": "$XSAPPNAME.NovalogManagerALL",
+            "description": "NovalogManagerALL"
+        }
+    ],
+    "attributes": [],
+    "role-templates": [
+        {
+            "name": "Token_Exchange",
+            "description": "UAA Token Exchange",
+            "scope-references": [
+                "uaa.user"
+            ]
+        },
+        {
+            "name": "NovalogViewer",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogViewer"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogCreateHV",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogCreateHV"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogUpdateHV",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogUpdateHV"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogDeleteHV",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogDeleteHV"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogManagerHV",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogManagerHV"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogCreateLoad",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogCreateLoad"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogUpdateLoad",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogUpdateLoad"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogDeleteLoad",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogDeleteLoad"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogManagerLoad",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogManagerLoad"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogCreateTemplate",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogCreateTemplate"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogUpdateTemplate",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogUpdateTemplate"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogDeleteTemplate",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogDeleteTemplate"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogManagerTemplate",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogManagerTemplate"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "NovalogManagerALL",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.NovalogManagerALL"
+            ],
+            "attribute-references": []
+        }
+    ],
+    "oauth2-configuration": {
+        "token-validity": 3600,
+        "redirect-uris": [
+            "https://*-caploadnovalog-app.cfapps.*.hana.ondemand.com/login/callback"
+        ]
+    }
+}

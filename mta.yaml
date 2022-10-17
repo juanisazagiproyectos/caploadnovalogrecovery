@@ -1,0 +1,146 @@
+_schema-version: "3.1"
+ID: caploadnovalog
+description: A simple CAP project.
+version: 1.0.0
+modules:
+  - name: caploadnovalog-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: caploadnovalog-hdi
+      - name: caploadnovalog-auth
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+      ignore:
+          - default-*.json
+          - .env
+          - "*node_modules*"
+          - package-lock.json
+    # ------------------ APP ROUTER MODULE -----------------------
+  - name: caploadnovalog-app
+  # ------------------------------------------------------------
+    type: approuter.nodejs
+    path: app
+    build-parameters:
+      ignore:
+        - default-*.json
+        - .env
+        - "*node_modules*"
+        - package-lock.json
+    parameters:
+      memory: 256M
+      disk-quota: 1024M
+    requires:
+      - name: caploadnovalog-auth
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv
+          url: ~{srv-url}
+          timeout: 600000
+          forwardAuthToken: true        
+  # ---------------- DATABASE DEPLOYER MODULE ------------------        
+  - name: caploadnovalog-db-deployer
+  # ------------------------------------------------------------
+    type: hdb
+    path: db
+    build-parameters:
+      ignore:
+        - default-*.json
+        - .env
+        - "*node_modules*"
+        - package-lock.json
+    requires:
+      - name: caploadnovalog-auth
+      - name: caploadnovalog-hdi
+        properties:
+          TARGET_CONTAINER: caploadnovalog-hdi
+    parameters:
+      buildpack: nodejs_buildpack
+  # ----------------------- DESTINATION SERVICE ----------------    
+  - name: caploadnovalog-destination-content
+  # ------------------------------------------------------------
+    type: com.sap.application.content
+    requires:
+      - name: caploadnovalog-destination-service
+        parameters:
+          content-target: true
+      - name: caploadnovalog_html_repo_host
+        parameters:
+          service-key:
+            name: caploadnovalog_html_repo_host-key
+      - name: caploadnovalog-auth
+        parameters:
+          service-key:
+            name: caploadnovalog-auth-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: apprcaploadnovalog_caploadnovalog_html_repo_host
+              ServiceInstanceName: caploadnovalog-html5-app-host-service
+              ServiceKeyName: caploadnovalog_html_repo_host-key
+              sap.cloud.service: apprcaploadnovalog
+            - Authentication: OAuth2UserTokenExchange
+              Name: apprcaploadnovalog_caploadnovalog_auth
+              ServiceInstanceName: caploadnovalog-auth
+              ServiceKeyName: caploadnovalog-auth-key
+              sap.cloud.service: apprcaploadnovalog
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+resources:
+# ------------------- HDI CONTAINER SERVICE ------------------
+  - name: caploadnovalog-hdi
+# ------------------------------------------------------------  
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      services: hana
+    properties:
+      hdi-service-name: ${service-name}
+  # ----------------------- UAA SERVICE ------------------------      
+  - name: caploadnovalog-auth
+  # ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        tenant-mode: dedicated
+        xsappname: caploadnovalog-${space}
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+  # ----------------------- DESTINATION SERVICE ----------------    
+  - name: caploadnovalog-destination-service
+  # ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        version: 1.0.0
+      service: destination
+      service-name: caploadnovalog-destination-service
+      service-plan: lite
+  - name: caploadnovalog_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: caploadnovalog-html5-app-host-service
+      service-plan: app-host
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install --production
+        - npx -p @sap/cds-dk cds build --production
+        - npx rimraf gen/db/src/gen/data
+        - npx rimraf gen/db/src/gen/csv

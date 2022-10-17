@@ -1,0 +1,17 @@
+{
+    "welcomeFile": "index.html",
+    "authenticationMethod": "route",
+    "routes": [
+        {
+            "source": "^/catalog/(.*)$",
+            "authenticationType": "xsuaa",
+            "destination": "srv"
+        }
+        ,
+        {
+            "source": "^/(.*)$",
+            "authenticationType": "xsuaa",
+            "localDir": "resources"
+        }
+    ]
+}

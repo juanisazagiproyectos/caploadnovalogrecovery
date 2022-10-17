@@ -22,7 +22,7 @@ modules:
           - .env
           - "*node_modules*"
           - package-lock.json
-    # ------------------ APP ROUTER MODULE -----------------------
+    # ------------------ APP ROUTER MODULE-----------------------
   - name: caploadnovalog-app
   # ------------------------------------------------------------
     type: approuter.nodejs

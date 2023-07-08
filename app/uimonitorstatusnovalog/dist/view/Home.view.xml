@@ -1,0 +1,81 @@
+<mvc:View controllerName="com.esenttia.uimonitorstatusnovalog.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:upload="sap.m.upload">
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <Table items="{mainModel>/Status}" id="table0" mode="SingleSelectLeft" selectionChange="onSelect">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <content>
+                                        <ToolbarSpacer />
+                                        <SearchField id="searchField" width="20%" placeholder="buscar" search=".onSearch" />
+                                        <Button id="createButton" icon="sap-icon://add" tooltip="Crear" visible="true" press="onOpenAddDialog">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="deleteButton" icon="sap-icon://delete" tooltip="Borrar" visible="true" press="onDelete">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="saveButton" text="Solo Lectura" type="Emphasized" visible="false" enabled="true" press="onSave" />
+                                        <Button id="editModeButton" visible="true" icon="sap-icon://edit" tooltip="Editar" press="onEditMode">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+
+                                    </content>
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <items>
+                                <ColumnListItem type="Active" id="item0">
+                                    <cells>
+                                        <Text id="id1" text="{mainModel>id}"/>
+                                        <Text id="id2" text="{mainModel>description}"/>
+                                        <Button id="id3" icon="sap-icon://edit" onPress="onSelect" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                            <columns>
+                                <Column>
+                                    <header>
+                                        <Label text="ID" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Descripción" />
+                                    </header>
+                                </Column>
+                            </columns>
+                        </Table>
+                    </content>
+                    <dependents>
+                        <Dialog id="OpenDialog" title="Crear Estado">
+                        <buttons>
+                            <Button id="confirmCreate" text="Create" press=".onCreate" type="Emphasized" />
+                            <Button id="cancelCreate" text="Cancel" press="onCancelDialog" type="Transparent" />
+                        </buttons>
+                        <form:SimpleForm editable="true" layout="ResponsiveGridLayout">
+                        <form:content>
+                            <Label text="ID" required="true" />
+                            <Input id="id" change="onNameChange" />
+                            <Label text="Descripción" />
+                            <Input id="descripcion" rows="4" />
+                        </form:content>
+                        </form:SimpleForm>
+                        </Dialog>
+                    </dependents>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>
+

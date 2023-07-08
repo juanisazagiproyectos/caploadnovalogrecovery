@@ -1,185 +1,221 @@
 using {com.novalog as novalog} from '../db/schema';
 
-service CatalogService @(requires : 'authenticated-user') {
-    entity Status @(restrict : [
+service CatalogService @(requires: 'authenticated-user') {
+    entity Status @(restrict: [
         {
-            grant : ['READ'],
-            to    : ['NovalogViewer']
+            grant: ['READ'],
+            to   : ['NovalogViewer']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'CREATE'
             ],
-            to    : ['NovalogCreateHV']
+            to   : ['NovalogCreateHV']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'UPDATE'
             ],
-            to    : ['NovalogUpdateHV']
+            to   : ['NovalogUpdateHV']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'DELETE'
             ],
-            to    : ['NovalogDeleteHV']
+            to   : ['NovalogDeleteHV']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerHV']
+            grant: ['*'],
+            to   : ['NovalogManagerHV']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerALL']
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
         }
     ]) as projection on novalog.Status;
 
-    @cds.persistence.exists
-    @cds.persistence.calcview
-    entity Parameter @(restrict : [
+    // @cds.persistence.exists
+    // @cds.persistence.calcview
+    entity Parameter @(restrict: [
         {
-            grant : ['READ'],
-            to    : ['NovalogViewer']
+            grant: ['READ'],
+            to   : ['NovalogViewer']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'CREATE'
             ],
-            to    : ['NovalogCreateHV']
+            to   : ['NovalogCreateHV']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'UPDATE'
             ],
-            to    : ['NovalogUpdateHV']
+            to   : ['NovalogUpdateHV']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'DELETE'
             ],
-            to    : ['NovalogDeleteHV']
+            to   : ['NovalogDeleteHV']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerHV']
+            grant: ['*'],
+            to   : ['NovalogManagerHV']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerALL']
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
         }
     ]) as projection on novalog.Parameter;
 
-    entity Mode @(restrict : [
+    entity Template @(restrict: [
         {
-            grant : ['READ'],
-            to    : ['NovalogViewer']
+            grant: ['READ'],
+            to   : ['NovalogViewer']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'CREATE'
             ],
-            to    : ['NovalogCreateHV']
+            to   : ['NovalogCreateTemplate']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'UPDATE'
             ],
-            to    : ['NovalogUpdateHV']
+            to   : ['NovalogUpdateTemplate']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'DELETE'
             ],
-            to    : ['NovalogDeleteHV']
+            to   : ['NovalogDeleteTemplate']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerHV']
+            grant: ['*'],
+            to   : ['NovalogManagerTemplate']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerALL']
-        }
-    ]) as projection on novalog.Mode;
-
-    entity Template @(restrict : [
-        {
-            grant : ['READ'],
-            to    : ['NovalogViewer']
-        },
-        {
-            grant : [
-                'READ',
-                'CREATE'
-            ],
-            to    : ['NovalogCreateTemplate']
-        },
-        {
-            grant : [
-                'READ',
-                'UPDATE'
-            ],
-            to    : ['NovalogUpdateTemplate']
-        },
-        {
-            grant : [
-                'READ',
-                'DELETE'
-            ],
-            to    : ['NovalogDeleteTemplate']
-        },
-        {
-            grant : ['*'],
-            to    : ['NovalogManagerTemplate']
-        },
-        {
-            grant : ['*'],
-            to    : ['NovalogManagerALL']
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
         }
     ]) as projection on novalog.Template;
 
-    entity Load @(restrict : [
+    entity Load @(restrict: [
         {
-            grant : ['READ'],
-            to    : ['NovalogViewer']
+            grant: ['READ'],
+            to   : ['NovalogViewer']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'CREATE'
             ],
-            to    : ['NovalogCreateLoad']
+            to   : ['NovalogCreateLoad']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'UPDATE'
             ],
-            to    : ['NovalogUpdateLoad']
+            to   : ['NovalogUpdateLoad']
         },
         {
-            grant : [
+            grant: [
                 'READ',
                 'DELETE'
             ],
-            to    : ['NovalogDeleteLoad']
+            to   : ['NovalogDeleteLoad']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerLoad']
+            grant: ['*'],
+            to   : ['NovalogManagerLoad']
         },
         {
-            grant : ['*'],
-            to    : ['NovalogManagerALL']
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
         }
     ]) as projection on novalog.Load;
+
+    entity Actividad @(restrict: [
+        {
+            grant: ['READ'],
+            to   : ['NovalogViewer']
+        },
+        {
+            grant: [
+                'READ',
+                'CREATE'
+            ],
+            to   : ['NovalogCreateLoad']
+        },
+        {
+            grant: [
+                'READ',
+                'UPDATE'
+            ],
+            to   : ['NovalogUpdateLoad']
+        },
+        {
+            grant: [
+                'READ',
+                'DELETE'
+            ],
+            to   : ['NovalogDeleteLoad']
+        },
+        {
+            grant: ['*'],
+            to   : ['NovalogManagerLoad']
+        },
+        {
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
+        }
+    ]) as projection on novalog.Actividad;
+
+    entity TipoMod_Actividad @(restrict: [
+        {
+            grant: ['READ'],
+            to   : ['NovalogViewer']
+        },
+        {
+            grant: [
+                'READ',
+                'CREATE'
+            ],
+            to   : ['NovalogCreateLoad']
+        },
+        {
+            grant: [
+                'READ',
+                'UPDATE'
+            ],
+            to   : ['NovalogUpdateLoad']
+        },
+        {
+            grant: [
+                'READ',
+                'DELETE'
+            ],
+            to   : ['NovalogDeleteLoad']
+        },
+        {
+            grant: ['*'],
+            to   : ['NovalogManagerLoad']
+        },
+        {
+            grant: ['*'],
+            to   : ['NovalogManagerALL']
+        }
+    ]) as projection on novalog.TipoMod_Actividad;
 }

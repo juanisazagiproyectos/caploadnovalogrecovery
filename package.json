@@ -64,9 +64,7 @@
                 "[development]": {
                     "strategy": "mock",
                     "users": {
-                        "joe": {},
-                        "julie": {},
-                        "bob": {}
+                        "admin": {}
                     }
                 }
             },

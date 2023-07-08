@@ -25,8 +25,7 @@ annotate service.Load with @(UI : {
         TypeName       : '{i18n>order}',
         TypeNamePlural : '{i18n>orders}',
         Title          : {Value : pedido},
-        Description    : {Value : actividad},
-        ImageUrl       : icon_status
+        Description    : {Value : actividad}
     },
     
     SelectionFields    : [
@@ -35,23 +34,19 @@ annotate service.Load with @(UI : {
         actividad,
         motivo,
         num_contenedor,
-        modo_id,
         status_id,
         fecha_envio,
         hora_envio
     ],
     LineItem           : [
         {
-            $Type : 'UI.DataFieldWithUrl',
-            Value : icon_status,
-            Url   : icon_status
+            $Type : 'UI.DataFieldWithUrl'
         },
         {Value : fecha_cargue},
         {Value : pedido},
         {Value : actividad},
         {Value : motivo},
         {Value : num_contenedor},
-        {Value : modo_id},
         {Value : status_id},
         {Value : fecha_envio},
         {Value : hora_envio}
@@ -98,7 +93,7 @@ annotate CatalogService.Load with @(Capabilities : {
     },
     InsertRestrictions : {
         $Type      : 'Capabilities.InsertRestrictionsType',
-        Insertable : false
+        Insertable : true
     }
 });
 

@@ -144,3 +144,4 @@ build-parameters:
         - npx -p @sap/cds-dk cds build --production
         - npx rimraf gen/db/src/gen/data
         - npx rimraf gen/db/src/gen/csv
+        - npx rimraf db/src/gen/data

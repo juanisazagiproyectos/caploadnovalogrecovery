@@ -1,0 +1,147 @@
+<mvc:View controllerName="com.uimonitorloaddatanovalog.uimonitorloaddatanovalog.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:upload="sap.m.upload">
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <Table id="table0" mode="MultiSelect" selectionChange="onSelect" items="{ path:'mainModel>/Load',factory:'.populateItems'}">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <content>
+                                        <ToolbarSpacer />
+                                        <SearchField id="searchField" visible="false" width="10%" placeholder="search" search=".onSearch" />
+                                        <Button id="cargaButton" icon="sap-icon://upload-to-cloud" text="Cargar Excel" type="Accept" visible="true" enabled="true" press="onOpenLoadExcelDialog" />
+                                        <Button id="carga1Button" icon="sap-icon://upload-to-cloud" tooltip="Cargar Excel" visible="false" press="onOpenLoadExcelDialog">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="createButton" icon="sap-icon://add" tooltip="Create" visible="false" press="onOpenAddDialog">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="deleteButton" icon="sap-icon://delete" tooltip="Delete" visible="false" press="onDelete">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="saveButton" text="Enviar a Novalog" icon="sap-icon://begin" type="Emphasized" visible="true" enabled="true" press="onSave" />
+                                        <Button id="editModeButton" visible="false" icon="sap-icon://edit" tooltip="Edit" press="onEditMode">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+
+                                    </content>
+                                    <dependents>
+                                    <Dialog id="OpenDialog" title="Excel Upload">
+                                            <upload:UploadSet uploadEnabled="true" id="uploadSet" items="{path: '/', templateShareable: false}" fileTypes="xlsx, xls" maxFileNameLength="200" beforeUploadStarts="onBeforeUploadStart" uploadCompleted="onUploadSetComplete" afterItemRemoved="onItemRemoved"
+                                            terminationEnabled="true">
+                                                <upload:UploadSetItem visibleRemove="true" visibleEdit="false" fileName="{name}" url="/upload">
+                                                    <upload:attributes>
+                                                        <ObjectAttribute title="Uploaded by" text="{user}" active="false"/>
+                                                    </upload:attributes>
+                                                </upload:UploadSetItem>
+                                            </upload:UploadSet>
+                                            <buttons>        
+                                                <Button text="Upload" press="onUploadSet" icon="sap-icon://upload-to-cloud" type="Emphasized"/>
+                                                <Button press="onCloseDialog" text="Cancel" icon="sap-icon://cancel"/>
+                                            </buttons>
+                                            <endButton>
+                                                <Button press=".onCloseDialog" text="Ok"/>
+                                            </endButton>    
+                                        </Dialog>
+                                    </dependents>
+
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column>
+                                    <header>
+                                        <Label text="Fec (dd/mm/aaaa)" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Pedido" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Tipo Modificación" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Actividad" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="7a9" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="901a12" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="1201a18" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="1801a659" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Pdte asignar" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Motivo" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Cant ContsBpiso" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Num Contenedor" />
+                                    </header>
+                                </Column>
+                                <Column visible="false">
+                                    <header>
+                                        <Label text="Estado" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Descripcion" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Mensaje" />
+                                    </header>
+                                </Column>
+                            </columns>
+                        </Table>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>
+

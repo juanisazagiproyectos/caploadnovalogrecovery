@@ -1,29 +1,27 @@
 namespace com.novalog;
 
 using {managed} from '@sap/cds/common';
-
+@odata.draft.enabled
 entity Status : managed {
-    key id          : UUID @(Core.Computed : True);
-    key code        : String(1);
-        description : String(100)
+    key id          : Integer;
+        description : String(100);
+        icono : String(100);
 };
-
-@cds.persistence.exists
-@cds.persistence.calcview
+@odata.draft.enabled
+entity TipoMod_Actividad : managed {
+    key id          : Integer;
+        tipoMod : String(50);
+        actividades: String(200)
+};
+@odata.draft.enabled
 entity Parameter : managed {
-    key id        : UUID @(Core.Computed : True);
+    key id        : Integer;
         Parameter : String(20);
-        Value     : String(500)
+        Value     : String(500);
 };
-
-entity Mode : managed {
-    key id          : UUID @(Core.Computed : True);
-        description : String(100)
-
-};
-
+@odata.draft.enabled
 entity Template : managed {
-    key id              : UUID @(Core.Computed : True);
+    key id              : Integer;
         template        : String(100);
         fecha_cargue    : Date;
         pedido          : String(1);
@@ -37,11 +35,12 @@ entity Template : managed {
         cant_cont_bpiso : String(1);
         num_contenedor  : String(1);
 };
-
+@odata.draft.enabled
 entity Load : managed {
-    key id              : UUID @(Core.Computed : True);
+    key id              : Integer64;
         fecha_cargue    : Date;
         pedido          : String(20);
+        tipoMod         : String(50);
         actividad       : String(200);
         h7a9            : Integer;
         h9_01a12        : Integer;
@@ -51,9 +50,14 @@ entity Load : managed {
         motivo          : String(200);
         cant_cont_bpiso : Integer;
         num_contenedor  : String(100);
-        modo            : Association to Mode;
-        status          : Association to Status;
-        icon_status     : String(50);
+        status          : Integer;
         fecha_envio     : Date;
-        hora_envio      : Time
-}
+        hora_envio      : Time;
+        mensaje         : String(200);
+};
+@odata.draft.enabled
+entity Actividad : managed {
+    key id          : Integer;
+        actividad : String(50);
+        des_actividad: String(200)
+};

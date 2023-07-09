@@ -3,145 +3,223 @@ ID: caploadnovalog
 description: A simple CAP project.
 version: 1.0.0
 modules:
-  - name: caploadnovalog-srv
-    type: nodejs
-    path: gen/srv
-    requires:
-      - name: caploadnovalog-hdi
-      - name: caploadnovalog-auth
-    provides:
-      - name: srv-api
-        properties:
-          srv-url: ${default-url}
+- name: caploadnovalog-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: caploadnovalog-hdi
+  - name: caploadnovalog-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm-ci
+    ignore:
+    - default-*.json
+    - .env
+    - '*node_modules*'
+    - package-lock.json
+- name: caploadnovalog-app
+  type: approuter.nodejs
+  path: app
+  requires:
+  - name: caploadnovalog-auth
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv
+      timeout: 600000
+      url: ~{srv-url}
+  - name: caploadnovalog-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 1024M
+    memory: 256M
+  build-parameters:
+    ignore:
+    - default-*.json
+    - .env
+    - '*node_modules*'
+    - package-lock.json
+- name: caploadnovalog-db-deployer
+  type: hdb
+  path: db
+  requires:
+  - name: caploadnovalog-auth
+  - name: caploadnovalog-hdi
+    properties:
+      TARGET_CONTAINER: caploadnovalog-hdi
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - default-*.json
+    - .env
+    - '*node_modules*'
+    - package-lock.json
+- name: caploadnovalog-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: caploadnovalog-destination-service
     parameters:
-      buildpack: nodejs_buildpack
-    build-parameters:
-      builder: npm-ci
-      ignore:
-          - default-*.json
-          - .env
-          - "*node_modules*"
-          - package-lock.json
-    # ------------------ APP ROUTER MODULE-----------------------
-  - name: caploadnovalog-app
-  # ------------------------------------------------------------
-    type: approuter.nodejs
-    path: app
-    build-parameters:
-      ignore:
-        - default-*.json
-        - .env
-        - "*node_modules*"
-        - package-lock.json
+      content-target: true
+  - name: caploadnovalog_html_repo_host
     parameters:
-      memory: 256M
-      disk-quota: 1024M
-    requires:
-      - name: caploadnovalog-auth
-      - name: srv-api
-        group: destinations
-        properties:
-          name: srv
-          url: ~{srv-url}
-          timeout: 600000
-          forwardAuthToken: true        
-  # ---------------- DATABASE DEPLOYER MODULE ------------------        
-  - name: caploadnovalog-db-deployer
-  # ------------------------------------------------------------
-    type: hdb
-    path: db
-    build-parameters:
-      ignore:
-        - default-*.json
-        - .env
-        - "*node_modules*"
-        - package-lock.json
-    requires:
-      - name: caploadnovalog-auth
-      - name: caploadnovalog-hdi
-        properties:
-          TARGET_CONTAINER: caploadnovalog-hdi
+      service-key:
+        name: caploadnovalog_html_repo_host-key
+  - name: caploadnovalog-auth
     parameters:
-      buildpack: nodejs_buildpack
-  # ----------------------- DESTINATION SERVICE ----------------    
-  - name: caploadnovalog-destination-content
-  # ------------------------------------------------------------
-    type: com.sap.application.content
-    requires:
-      - name: caploadnovalog-destination-service
-        parameters:
-          content-target: true
-      - name: caploadnovalog_html_repo_host
-        parameters:
-          service-key:
-            name: caploadnovalog_html_repo_host-key
-      - name: caploadnovalog-auth
-        parameters:
-          service-key:
-            name: caploadnovalog-auth-key
+      service-key:
+        name: caploadnovalog-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: apprcaploadnovalog_caploadnovalog_html_repo_host
+          ServiceInstanceName: caploadnovalog-html5-app-host-service
+          ServiceKeyName: caploadnovalog_html_repo_host-key
+          sap.cloud.service: apprcaploadnovalog
+        - Authentication: OAuth2UserTokenExchange
+          Name: apprcaploadnovalog_caploadnovalog_auth
+          ServiceInstanceName: caploadnovalog-auth
+          ServiceKeyName: caploadnovalog-auth-key
+          sap.cloud.service: apprcaploadnovalog
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: caploadnovalog-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: caploadnovalog_html_repo_host
     parameters:
-      content:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comuimonitorloaddatanovaloguimonitorloaddatanovalog.zip
+      name: comuimonitorloaddatanovaloguimonitorloaddatanovalog
+      target-path: resources/
+    - artifacts:
+      - comesenttiauimonitorstatusnovalog.zip
+      name: comesenttiauimonitorstatusnovalog
+      target-path: resources/
+    - artifacts:
+      - comesenttiauimonitormodenovalog.zip
+      name: comesenttiauimonitormodenovalog
+      target-path: resources/
+    - artifacts:
+      - comesenttiaadmoncargueexpuimonitoradmoncargueexp.zip
+      name: comesenttiaadmoncargueexpuimonitoradmoncargueexp
+      target-path: resources/
+- name: comuimonitorloaddatanovaloguimonitorloaddatanovalog
+  type: html5
+  path: app/uimonitorloaddatanovalog
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comesenttiauimonitorstatusnovalog
+  type: html5
+  path: app/uimonitorstatusnovalog
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comesenttiauimonitormodenovalog
+  type: html5
+  path: app/uimonitormodenovalog
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comesenttiaadmoncargueexpuimonitoradmoncargueexp
+  type: html5
+  path: app/uimonitoradmoncargueexp
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: caploadnovalog-hdi
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+    services: hana
+  properties:
+    hdi-service-name: ${service-name}
+- name: caploadnovalog-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: caploadnovalog-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: caploadnovalog-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
         instance:
           destinations:
-            - Name: apprcaploadnovalog_caploadnovalog_html_repo_host
-              ServiceInstanceName: caploadnovalog-html5-app-host-service
-              ServiceKeyName: caploadnovalog_html_repo_host-key
-              sap.cloud.service: apprcaploadnovalog
-            - Authentication: OAuth2UserTokenExchange
-              Name: apprcaploadnovalog_caploadnovalog_auth
-              ServiceInstanceName: caploadnovalog-auth
-              ServiceKeyName: caploadnovalog-auth-key
-              sap.cloud.service: apprcaploadnovalog
-          existing_destinations_policy: ignore
-    build-parameters:
-      no-source: true
-resources:
-# ------------------- HDI CONTAINER SERVICE ------------------
-  - name: caploadnovalog-hdi
-# ------------------------------------------------------------  
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-      services: hana
-    properties:
-      hdi-service-name: ${service-name}
-  # ----------------------- UAA SERVICE ------------------------      
-  - name: caploadnovalog-auth
-  # ------------------------------------------------------------
-    type: org.cloudfoundry.managed-service
-    parameters:
-      config:
-        tenant-mode: dedicated
-        xsappname: caploadnovalog-${space}
-      path: ./xs-security.json
-      service: xsuaa
-      service-plan: application
-  # ----------------------- DESTINATION SERVICE ----------------    
-  - name: caploadnovalog-destination-service
-  # ------------------------------------------------------------
-    type: org.cloudfoundry.managed-service
-    parameters:
-      config:
-        HTML5Runtime_enabled: true
-        version: 1.0.0
-      service: destination
-      service-name: caploadnovalog-destination-service
-      service-plan: lite
-  - name: caploadnovalog_html_repo_host
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: html5-apps-repo
-      service-name: caploadnovalog-html5-app-host-service
-      service-plan: app-host
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: caploadnovalog-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: caploadnovalog-destination-service
+    service-plan: lite
+  requires:
+  - name: srv-api
+- name: caploadnovalog_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: caploadnovalog-html5-app-host-service
+    service-plan: app-host
 parameters:
+  deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npm install --production
-        - npx -p @sap/cds-dk cds build --production
-        - npx rimraf gen/db/src/gen/data
-        - npx rimraf gen/db/src/gen/csv
-        - npx rimraf db/src/gen/data
+  - builder: custom
+    commands:
+    - npm install --production
+    - npx -p @sap/cds-dk cds build --production
+    - npx rimraf gen/db/src/gen/data
+    - npx rimraf gen/db/src/gen/csv
